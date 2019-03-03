@@ -18,7 +18,8 @@ banner = r"""
  \__, |_|  \__,_| .__/|_| |_|\__, |_|      \___/_/\_\ .__/ \___/|___/\___|
   __/ |         | |             | |                 | |                   
  |___/          |_|             |_|                 |_|                   
-"""
+""" # Thanks to http://patorjk.com/software/taag/
+
 from commands import help
 from util import log
 from util import error
