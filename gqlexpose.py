@@ -1,5 +1,5 @@
 # This file is part of graphql-expose
-# See https://github.com/mateoSploit/graphql-expose for more information
+# See https://github.com/mateoSploit/graphql_expose for more information
 # Copyright (C) Matthew Moses <mmoses.web@gmail.com>
 # This program is published under a MIT license
 
@@ -19,35 +19,10 @@ banner = r"""
   __/ |         | |             | |                 | |                   
  |___/          |_|             |_|                 |_|                   
 """
-
-usage = """
-    commands \t|\t description
-    help \t|\t displays this usage information
-"""
-
-def ask(message):
-    """
-    Prompts a user for input
-    """
-    return input("[+] {message}".format(message=message))
-
-def log(message):
-    """
-    Prints a message to the console
-    """
-    print("[+] {message}".format(message=message))
-
-def error(message):
-    """
-    Prints an error message to the console
-    """
-    print("[-] {message}".format(message=message))
-
-def help():
-    """
-    Prints usage information to the console
-    """
-    log(usage)
+from commands import help
+from util import log
+from util import error
+from util import ask
 
 def interact(options):
     """
