@@ -8,7 +8,8 @@
     |___/          |_|             |_|                 |_|                   
 
 # graphql_expose
-A script to easily explore GraphQL APIs on the command line
+A script to easily explore GraphQL APIs on the command line. Please use responsibly
+and for good purposes. Provided AS-IS. See LICENSE for details.
 
 Written for Python3
 
