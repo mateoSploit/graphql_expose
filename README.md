@@ -7,7 +7,7 @@
     __/ |         | |             | |                 | |                   
     |___/          |_|             |_|                 |_|                   
 
-# graphql-expose
+# graphql_expose
 A script to easily explore GraphQL APIs on the command line
 
 Written for Python3
