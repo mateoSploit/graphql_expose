@@ -23,6 +23,7 @@ banner = r"""
 
 from commands import run_query
 from commands import help
+from commands import introspect
 from exs import ApplicationCriticalError
 from util import log
 from util import error
@@ -36,19 +37,31 @@ def interact(options):
     """
     url = options["url"]
     log("Interacting with: {url}".format(url=url))
+    help()
     log("Type your command or \"help\" for usage.")
     exit = False
+    first = True
     while not exit:
-        command = ask("$")
+        if first:
+            command = ask("$ [introspect]")
+        else:
+            command = ask("$")
+        
+        if first and not command:
+            command = "introspect"
+
+        if first:
+            first = False
+
         if command in [ "exit", "quit" ]:
             log("Exiting...")
             exit = True
         elif "help" == command:
             help()
         elif "query" == command:
-            result = run_query(url)
-            if result:
-                log("Response: {result}".format(result=result))
+            run_query(url)
+        elif "introspect" == command:
+            introspect(url)
         else:
             error("Unrecognized command: {command}".format(command=command))
             help()
