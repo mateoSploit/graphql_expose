@@ -1,4 +1,4 @@
-# This file is part of graphql-expose
+# This file is part of graphql_expose
 # See https://github.com/mateoSploit/graphql_expose for more information
 # Copyright (C) Matthew Moses <mmoses.web@gmail.com>
 # This program is published under a MIT license
@@ -7,6 +7,7 @@
 Main module
 """
 
+import logging
 import sys
 
 banner = r"""
@@ -20,25 +21,34 @@ banner = r"""
  |___/          |_|             |_|                 |_|                   
 """ # Thanks to http://patorjk.com/software/taag/
 
+from commands import run_query
 from commands import help
+from exs import ApplicationCriticalError
 from util import log
 from util import error
 from util import ask
+
+DEFAULT_URL = "http://localhost:4000/graphql"
 
 def interact(options):
     """
     Controls interactive prompt with user
     """
-    log("Interacting with: {url}".format(url=options["url"]))
+    url = options["url"]
+    log("Interacting with: {url}".format(url=url))
     log("Type your command or \"help\" for usage.")
     exit = False
     while not exit:
-        command = ask("$ ")
+        command = ask("$")
         if command in [ "exit", "quit" ]:
             log("Exiting...")
             exit = True
-        elif "help" in command:
+        elif "help" == command:
             help()
+        elif "query" == command:
+            result = run_query(url)
+            if result:
+                log("Response: {result}".format(result=result))
         else:
             error("Unrecognized command: {command}".format(command=command))
             help()
@@ -49,8 +59,17 @@ def setup():
     Gets required details from user so we can
     start interacting with a GraphQL API
     """
-    url = ask("URL: ")
-    return { "url": url }   
+    url = ask("URL [{default_url}]: ".format(default_url=DEFAULT_URL)).strip()
+    if not url:
+        url = DEFAULT_URL
+    else:
+        log("User provided \"{url}\"".format(url=url))
+    
+    # TODO Also, validate that the URL is valid
+    if not url:
+        raise ApplicationCriticalError("Invalid URl detected.")
+
+    return { "url": url }
 
 if __name__ == "__main__":
     """
@@ -62,3 +81,7 @@ if __name__ == "__main__":
         interact(options)
     except KeyboardInterrupt:
         pass
+    except ApplicationCriticalError as ex:
+        error("Critical error detected. Application must exit... Error: {msg}".format(msg=ex))
+    except Exception:
+        logging.exception("Unhandled exception")
