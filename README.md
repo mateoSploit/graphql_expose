@@ -12,4 +12,14 @@ A script to easily explore GraphQL APIs on the command line
 
 Written for Python3
 
+## System Requirements
+- Python3
+
+## Dependencies
+- requests (`pip install requests`)
+
+## Running
+
 `python3 gqlexpose.py`
+
+Follow prompts then enter `help` when prompted for a command
