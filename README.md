@@ -18,6 +18,7 @@ Written for Python3
 
 ## Dependencies
 - requests (`pip install requests`)
+- graphql (`pip install graphql`)
 
 ## Running
 
