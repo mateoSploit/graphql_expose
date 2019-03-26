@@ -44,9 +44,8 @@ def tokenize_graphql_parameters(query):
     for targeted injections
     """
     document = parse(query)
-    for blah in document.definitions:
-        blah.selection_set.selections[0].arguments[0].value.value = "*"
-        log(blah.selection_set.selections[0].arguments[0].value.value)
+    for arg in document.definitions[0].selection_set.selections[0].arguments:
+        arg.value.value = "*"
     return print_ast(document)
 
 def detect_graphql(payload):
