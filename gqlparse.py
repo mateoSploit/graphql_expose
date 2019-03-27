@@ -8,6 +8,16 @@ import os
 from urllib.parse import urlparse
 import xml.etree.ElementTree as ET
 
+banner = r"""
+                       _           _                                      
+                      | |         | |                                     
+  __ _ _ __ __ _ _ __ | |__   __ _| |______ _____  ___ __   ___  ___  ___ 
+ / _` | '__/ _` | '_ \| '_ \ / _` | |______/ _ \ \/ / '_ \ / _ \/ __|/ _ \
+| (_| | | | (_| | |_) | | | | (_| | |     |  __/>  <| |_) | (_) \__ \  __/
+ \__, |_|  \__,_| .__/|_| |_|\__, |_|      \___/_/\_\ .__/ \___/|___/\___|
+  __/ |         | |             | |                 | |                   
+ |___/          |_|             |_|                 |_|                   
+""" # Thanks to http://patorjk.com/software/taag/
 
 def error(msg):
     """
@@ -121,8 +131,7 @@ def process_xml_file(xmlroot):
         modified_query = handle_graphql_json(body)
 
         body = replace_http_req_body(contents, json.dumps(modified_query).encode("utf-8"))
-        print(body)
-        print("Writing response to {path}".format(path=dest))
+        log("Writing response to {path}".format(path=dest))
         write_to_file(dest, body)
         counter += 1
 
@@ -166,6 +175,7 @@ if __name__ == "__main__":
     """
     Main application entry point
     """
+    print(banner)
     args = parse_args()
     parse_file(args.infile)
-    
+    log("Done.")
