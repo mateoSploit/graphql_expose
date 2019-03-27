@@ -29,13 +29,18 @@ def write_to_file(filepath, contents):
     with open(filepath, "wb") as f:
         f.write(contents)
 
-def tokenize_graphql_variables():
+def tokenize_graphql_variables(variables):
     """
     Parses a GraphQL query and replaces
     variable values with tokens to be used
     for targeted injections
     """
-    pass
+    for key in variables:
+        try:
+            variables[key] = "*"
+        except AttributeError:
+            error("Node did not have a variable value to replace")
+    return json.dumps(variables)
 
 def tokenize_graphql_parameters(query):
     """
@@ -45,7 +50,11 @@ def tokenize_graphql_parameters(query):
     """
     document = parse(query)
     for arg in document.definitions[0].selection_set.selections[0].arguments:
-        arg.value.value = "*"
+        try:
+            if arg.value:
+                arg.value.value = "*"
+        except AttributeError:
+            error("Node did not have a parameter value to replace")
     return print_ast(document)
 
 def detect_graphql(payload):
@@ -62,8 +71,25 @@ def handle_graphql_json(payload):
     
     if detect_graphql(payload_json):
         log("Appears to be a valid GraphQL query...")
-        result = tokenize_graphql_parameters(payload_json["query"])
-        payload_json["query"] = result
+        
+        # Replace values in parameters
+        result = None
+        query_json = payload_json["query"]
+        if query_json:
+            result = tokenize_graphql_parameters(query_json)
+        
+        # Replace values in variables
+        variables = None
+        variables_json = payload_json["variables"]
+        if variables_json:
+            variables = tokenize_graphql_variables(variables_json)
+        
+        if result:
+            payload_json["query"] = result
+        
+        if variables:
+            payload_json["variables"] = variables
+        
         return payload_json
     else:
         error("HTTP payload body is not a valid GraphQL query")
@@ -105,7 +131,6 @@ def parse_xml_file(infile):
     Parse an XML file
     """
     tree = ET.parse(infile)
-    print(dir(tree))
     process_xml_file(tree.getroot())
 
 def deterine_file_type(infile):
