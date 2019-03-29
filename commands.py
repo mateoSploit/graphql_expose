@@ -13,6 +13,7 @@ from util import ask
 from util import ask_multi
 from util import log
 from util import error
+import urllib3
 
 usage = """
     commands \t|\t description
@@ -35,11 +36,18 @@ def run_query(url):
         log("Response: {result}".format(result=result))
 
 def gql_call(url, query):
-    request = requests.post(url, json={ "query": query })
-    if request.status_code == 200:
-        return request.json()
-    else:
-        error("Query failed. {error}".format(error=request.text))
+    try:
+        request = requests.post(url, json={ "query": query })
+    except requests.exceptions.RequestException as ex:
+        error("Unable to connect to url")
+    else :
+        if request.status_code == 200:
+            try:
+                return request.json()
+            except ValueError:
+                error("Could not parse return payload into valid JSON")
+        else:
+            error("Query failed. {error}".format(error=request.text))
 
 def query_type_introspect(url, name):
     """
@@ -80,6 +88,9 @@ def introspect(url):
     """
     query_types = []
     result = gql_call(url, list_query_type_query)
+    if result is None:
+        return
+        
     for entry in result["data"]["__schema"]["types"]:
         if entry["name"] and (entry["name"].startswith("__") or entry["name"] in ["String", "Boolean"]):
             continue
