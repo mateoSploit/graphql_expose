@@ -50,7 +50,7 @@ def tokenize_graphql_variables(variables):
             variables[key] = "*"
         except AttributeError:
             error("Node did not have a variable value to replace")
-    return json.dumps(variables)
+    return variables
 
 def tokenize_graphql_parameters(query):
     """
