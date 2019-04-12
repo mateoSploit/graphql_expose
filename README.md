@@ -8,7 +8,9 @@
     |___/          |_|             |_|                 |_|                   
 
 # graphql_expose
-A couple of proof of concept (PoC) scripts to easily explore GraphQL APIs on the command line and help make scanning tools more effective with GraphQL. Please use responsibly and for good purposes. Provided AS-IS. See LICENSE for details.
+A couple of proof of concept (PoC) scripts to easily explore GraphQL APIs on the command line and help make scanning tools more effective with GraphQL. Please use responsibly and for good purposes. Developers assume no responsiblility for misuse. Provided AS-IS. See LICENSE for details.
+
+Pull requests welcome!
 
 Written for Python3
 
